@@ -1,0 +1,9 @@
+---
+applications:
+- name: openolitor-tools-pdf
+  memory: 512M
+  instances: 1
+  host: openolitor-tools-pdf
+  domain: scapp.io
+  path: target/openolitor-tools-pdf-0.0.1.jar
+  buildpack: https://github.com/OpenOlitor/heroku-buildpack-multi
