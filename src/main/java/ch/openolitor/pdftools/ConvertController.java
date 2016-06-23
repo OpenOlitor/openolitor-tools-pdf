@@ -23,10 +23,11 @@ public class ConvertController {
 	@RequestMapping(method = RequestMethod.POST, value = "/convert2pdf")
 	public void handleFileUpload(@RequestParam("name") String name,
 			@RequestParam("upload") MultipartFile file,
-			//RedirectAttributes redirectAttributes, 
+			// RedirectAttributes redirectAttributes,
 			HttpServletResponse response) {
 		if (name.contains("/")) {
-			System.err.println("Folder separators not allowed in file: " + name);
+			System.err
+					.println("Folder separators not allowed in file: " + name);
 		}
 
 		if (!file.isEmpty()) {
@@ -41,36 +42,44 @@ public class ConvertController {
 				try {
 					// Execute command
 					System.out.println("File gets now converted: " + fileName);
-					String[] command = {"soffice",  "--headless",  "--convert-to", "pdf", "--outdir",  "/tmp/",
+					String[] command = { "soffice", "--headless",
+							"--convert-to", "pdf", "--outdir", "/tmp/",
 							fileName };
-					
+
 					ProcessBuilder pb = new ProcessBuilder(command);
 					pb.redirectOutput(Redirect.INHERIT);
 					pb.redirectError(Redirect.INHERIT);
 					Process child = pb.start();
-					
+
 					int exitVal = child.waitFor();
 
-					response.setHeader("Content-Type", "application/pdf");
 					String newFileName = fileName.replace(".odt", ".pdf");
-					System.out.println("File got converted: " + newFileName + " : Exit value : " + exitVal);
-					InputStream is = new FileInputStream(newFileName);
-					// copy it to response's OutputStream
-					org.apache.commons.io.IOUtils.copy(is,
-							response.getOutputStream());
-					response.flushBuffer();
-			        new File(fileName).delete();
-			        new File(newFileName).delete();
+					
+					if (0 == exitVal) {
+						response.setHeader("Content-Type", "application/pdf");
+						System.out.println("File got converted: " + newFileName
+								+ " : Exit value : " + exitVal);
+						InputStream is = new FileInputStream(newFileName);
+						// copy it to response's OutputStream
+						org.apache.commons.io.IOUtils.copy(is,
+								response.getOutputStream());
+						response.flushBuffer();
+					} else {
+						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Could not execute command. Exit status code: " + exitVal);
+					}
+					
+					new File(fileName).delete();
+					new File(newFileName).delete();
 				} catch (IOException e) {
 				}
 
 			} catch (Exception e) {
-				System.err.println("Exception occurred converting file: " + name + ": " + e.getMessage());
+				System.err.println("Exception occurred converting file: "
+						+ name + ": " + e.getMessage());
 				e.printStackTrace();
 			}
 		} else {
 			System.err.println("File was empty: " + name);
 		}
 	}
-
 }
