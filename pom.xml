@@ -5,7 +5,7 @@
 
     <groupId>ch.openolitor</groupId>
     <artifactId>openolitor-tools-pdf</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
