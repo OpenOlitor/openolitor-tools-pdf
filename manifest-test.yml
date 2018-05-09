@@ -5,6 +5,6 @@ applications:
   instances: 1
   host: openolitor-tools-pdf-test
   domain: scapp.io
-  path: target/openolitor-tools-pdf-0.0.2.jar
+  path: target/openolitor-tools-pdf-0.0.3.jar
   buildpack: https://github.com/OpenOlitor/heroku-buildpack-multi
   stack: cflinuxfs2

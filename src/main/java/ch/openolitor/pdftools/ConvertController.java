@@ -14,6 +14,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +47,10 @@ public class ConvertController {
       System.err.println("IOException: " + e.getMessage());
     }
 	}
+
+  @RequestMapping(method = RequestMethod.GET, value = "/ping")
+  @ResponseBody
+	public String ping() {
+    return "Pong!";
+  }
 }
